@@ -1,5 +1,13 @@
 import socket
 import sys
+import os
+
+def read_file(path):
+    with open(path, "r") as f:
+        return f.read()
+
+def write_file(path):
+    pass
 
 def main():
     host = "127.0.0.1"
@@ -19,8 +27,23 @@ def main():
                 connection.send(command.encode())
                 if (command == "exit"):
                     break
-                resp = connection.recv(4096).decode()
-                print(resp)
+                elif (command == "upload_file"):
+                    file = input("File to Upload (must be in server cwd): ")
+                    file_contents = read_file(file)
+                    connection.send(file_contents.encode())
+                    resp = connection.recv(4096).decode()
+                    print(resp)
+                elif (command == "download_file"):
+                    file = input("File to Upload (must be in the client cwd): ")
+                    connection.send(file.encode())
+                    resp = connection.recv(4096).decode()
+                    print("File Preview: " + resp[:9])
+                    file_path = os.getcwd + file
+                    write_file(file_path)
+                    print("File written to server cwd -> " + file_path)
+                else:    
+                    resp = connection.recv(4096).decode()
+                    print(resp)
         finally:
             connection.close()
             break
