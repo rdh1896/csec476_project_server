@@ -6,8 +6,9 @@ def read_file(path):
     with open(path, "r") as f:
         return f.read()
 
-def write_file(path):
-    pass
+def write_file(contents):
+    with open("downloaded_file.txt", "w") as f:
+        f.write(contents)
 
 def main():
     host = "127.0.0.1"
@@ -34,13 +35,12 @@ def main():
                     resp = connection.recv(4096).decode()
                     print(resp)
                 elif (command == "download_file"):
-                    file = input("File to Upload (must be in the client cwd): ")
+                    file = input("File to Download (must be in the client cwd, try uploaded_file.txt...): ")
                     connection.send(file.encode())
                     resp = connection.recv(4096).decode()
                     print("File Preview: " + resp[:9])
-                    file_path = os.getcwd + file
-                    write_file(file_path)
-                    print("File written to server cwd -> " + file_path)
+                    write_file(resp)
+                    print("File written to server cwd")
                 else:    
                     resp = connection.recv(4096).decode()
                     print(resp)
