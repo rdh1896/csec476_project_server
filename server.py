@@ -98,7 +98,7 @@ def main():
                     resp = decrypt(connection.recv(8192).decode())
                     print(resp)
                 elif (command == "download_file"):
-                    file = input("File to Download (must be in the client cwd, try uploaded_file.txt...): ")
+                    file = input("File to Download (must be in the client cwd, try uploaded_file...): ")
                     enc_file = encrypt(file)
                     connection.send(enc_file.encode())
                     resp = decrypt(connection.recv(8192).decode())
